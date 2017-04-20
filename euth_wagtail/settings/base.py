@@ -306,7 +306,6 @@ WEBPACK_LOADER = {
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'node_modules/salvattore/dist'),
     os.path.join(BASE_DIR, 'node_modules/flatpickr/dist'),
     os.path.join(BASE_DIR, 'node_modules/leaflet/dist'),
     os.path.join(BASE_DIR, 'node_modules/leaflet-draw/dist'),
