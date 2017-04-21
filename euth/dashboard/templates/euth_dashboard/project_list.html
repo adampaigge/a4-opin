@@ -4,19 +4,29 @@
 {% block dashboard_content %}
 <h1 class="black-divider dashboard-title">{% trans 'Projects' %}</h1>
 
+<div class="dashboard-project-controls">
+    <a href="{% url 'dashboard-blueprint-list' organisation_slug=view.organisation.slug %}" class="dashboard-project-create btn btn-primary">{% trans 'create project' %}</a>
+    {% if project_list|length > 0 %}
+    <div class="dashboard-project-filter filter-bar">
+        {% for field in view.filter.form %}
+        {% if field.name != 'ordering' %}
+        {{ field }}
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 
-<div class="projects-list">
-    <a href="{% url 'dashboard-blueprint-list' organisation_slug=view.organisation.slug %}" class="btn btn-primary">create project</a>
-
+<div class="dashboard-projects-list">
     {% if project_list|length == 0 %}
-        {% trans 'No projects created' %}
+    {% trans 'No projects created' %}
     {% else %}
     <ul>
         {% for project in project_list %}
             <li class="tile-list project-tile-list">
                 <div class="row">
                     <div class="col-sm-9">
-                        <a href="{% url 'dashboard-project-edit' organisation_slug=view.organisation.slug slug=project.slug %}">
+                        <a href="{% url 'dashboard-project-edit' project.slug %}">
                         <i class="fa fa-edit" aria-hidden="true"></i>
                         <strong>
                             {{ project.name }}
@@ -29,16 +39,24 @@
                         {% get_days project.days_left as days %}
                         <div class="project-tile-badges">
                             <span class="label label-type">{{ project.module_set.first.phase_set.first.content.module_name }}</span>
-                            {% if not project.is_public %}<span class="label label-private">private</span>{% endif %}
-                            {% if project.has_finished %}<span class="label label-finished">Finished</span>{% endif %}
-                            {% if days %}<span class="label label-runningout">{{ days }}</span>{% endif %}
+                            {% if not project.is_public %}
+                            <span class="label label-private">{% trans 'private' %}</span>
+                            {% endif %}
+                            {% if project.is_archived %}
+                            <span class="label label-archived">{% trans 'archived' %}</span>
+                            {% elif project.has_finished %}
+                            <span class="label label-finished">{% trans 'finished' %}</span>
+                            {% endif %}
+                            {% if days %}
+                            <span class="label label-runningout">{{ days }}</span>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <span class="pull-right">
                             <i class="fa fa-star"></i> {{ project.follow_set.all.count }}
-                            <a href="{% url 'dashboard-project-users' organisation_slug=view.organisation.slug slug=project.slug %}"
+                            <a href="{% url 'dashboard-project-users' project.slug %}"
                                title="{% trans 'Users' %}" class="btn btn-hover-primary btn-sm">
                                     <i class="fa fa-user"></i>
                             </a>
