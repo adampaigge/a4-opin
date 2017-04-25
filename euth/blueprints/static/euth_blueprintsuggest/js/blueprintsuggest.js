@@ -1,13 +1,12 @@
 /* global jQuery django */
 (function ($) {
   var blueprintsuggest = {
-    init: function (nonFinetuningAims) {
+    init: function () {
       this.$aim = $('input[name="aim"]')
       this.$experience = $('input[name="experience"]')
       this.$result = $('input[name="result"]')
       this.$motivation = $('input[name="motivation"]')
       this.$form = $('.blueprintsuggest')
-      this.$nonFinetuningAims = nonFinetuningAims || []
 
       $('.js-continue').on('click', this.clickContinueHandler.bind(this))
       $('.js-back').on('click', this.clickBackHandler)
@@ -29,13 +28,7 @@
         return true
       }
 
-      var val = $checked.val()
-      if (this.$nonFinetuningAims.indexOf(val) > -1) {
-        e.preventDefault()
-        this.$form.submit()
-      } else {
-        $tab.removeClass('active').next().addClass('active')
-      }
+      $tab.removeClass('active').next().addClass('active')
 
       return false
     },
@@ -72,6 +65,6 @@
   }
 
   $(function () {
-    blueprintsuggest.init(['run_competition', 'work_document'])
+    blueprintsuggest.init()
   })
 }(jQuery))
